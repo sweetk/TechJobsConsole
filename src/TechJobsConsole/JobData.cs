@@ -43,11 +43,15 @@ namespace TechJobsConsole
             // load data, if not already loaded
             LoadData();
 
+            value = value.ToLower();
+
             List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
 
             foreach (Dictionary<string, string> row in AllJobs)
             {
                 string aValue = row[column];
+
+                aValue = aValue.ToLower();
 
                 if (aValue.Contains(value))
                 {
@@ -55,6 +59,48 @@ namespace TechJobsConsole
                 }
             }
 
+            if (jobs.Count == 0)
+            {
+                Dictionary<string, string> empty_job = new Dictionary<string, string>();
+                empty_job["Sorry"] = "No job matching the search criteria was found.";
+                jobs.Add(empty_job);
+            }
+            return jobs;
+        }
+
+        public static List<Dictionary<string, string>> FindByValue(string value)
+        {
+            // load data, if not already loaded
+            LoadData();
+
+            value = value.ToLower();
+
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+
+            foreach (Dictionary<string, string> job in AllJobs)
+            {
+                foreach(KeyValuePair<string, string> criteria in job)
+                {
+                    string aValue = criteria.Value;
+
+                    aValue = aValue.ToLower();
+
+                    if (aValue.Contains(value))
+                    {
+                        if (!jobs.Contains(job))
+                        {
+                            jobs.Add(job);
+                        }
+                    }
+                }
+            }
+
+            if(jobs.Count == 0)
+            {
+                Dictionary<string, string> empty_job = new Dictionary<string, string>();
+                empty_job["Sorry"] = "No job matching the search criteria was found.";
+                jobs.Add(empty_job);
+            }
             return jobs;
         }
 
